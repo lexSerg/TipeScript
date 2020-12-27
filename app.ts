@@ -85,17 +85,34 @@ class Fraction {
        let deput =  new Deputy(weight, height, firstName, lastName, age, isBribetaker, bribe);
        this.deputyList.push(deput);
     };
-    removeDeputy(deputy:number): void{
+    removeDeputy(deputy:number): string{
         this.deputyList.splice(deputy, 1)
+        return `Удален депутат под номером ${deputy} -
+         ${this.deputyList[deputy].firstName}
+         ${this.deputyList[deputy].firstName} `
+    }
+    removeCorruptionDeputy(): void{
+        let isCorruptions:boolean = false;
+        for (let i = 0; i < this.deputyList.length; i++) {
+            if (this.deputyList[i].isBribetaker)  {
+                this.deputyList.splice(i, 1);
+                isCorruptions = true;
+                i--;
+            }
+        }
+        if (isCorruptions) console.log('Коррупционеров исключили из фракции');
+        console.log('Во фракции нет коррупционеров');
     }
     showAllDeputy(){
+        (this.deputyList.length === 0) ? 
+        console.log('Во фракции нет ни одного депутата'):
         console.log(this.deputyList);    
      };
 }
 
 let depArr = [
     {weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000000},
-    {weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false},
+    {weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: true},
     {weight: 50, height: 167, firstName: 'Юлия', lastName: 'Тимошенко', age: 60, isBribetaker: true, bribe: 200000000},
     {weight: 106, height: 181, firstName: 'Петр', lastName: 'Порошенко', age: 55, isBribetaker: true, bribe: 500000000},
     {weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 10000000},
@@ -124,4 +141,7 @@ fraction.showAllDeputy();
 // let dep1 = new Deputy(65, 154, 'FGf', 'DDDDDD', 65, true, 50);
 // console.log(dep1);
 //fraction.showAllDeputy();
-// fraction.showAllDeputy();
+fraction.removeCorruptionDeputy();
+console.log('*****************');
+
+fraction.showAllDeputy();
