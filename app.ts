@@ -92,6 +92,11 @@ class Fraction {
          ${this.deputyList[deputy].firstName}
          ${this.deputyList[deputy].firstName} `
     }
+    removeAllDeputies():void {
+        this.deputyList = [];
+        console.log('Во фракции нет ни одного депутата');
+        
+    }
     removeCorruptionDeputy(): void{
         let isCorruptions:boolean = false;
         for (let i = 0; i < this.deputyList.length; i++) {
@@ -125,7 +130,16 @@ class Fraction {
         (this.deputyList.length === 0) ? 
         console.log('Во фракции нет ни одного депутата'):
         console.log(this.deputyList);    
-     };
+    };
+    showTotalCorruptionSum():void {
+        const sum = this.deputyList.reduce((acc, iter, index) => {
+            if (!(index === 0)) acc.bribe = acc.bribe + iter.bribe
+            return acc
+        }
+        )
+        console.log(`Общая сумма взяток фракции: ${sum.bribe}$`);
+        
+    }
 }
 
 let depArr = [
@@ -164,3 +178,5 @@ fraction.showAllDeputy();
 // fraction.showAllDeputy();
 // fraction.showMostCorruptionDeputy();
 // console.log(fraction.deputyList[2].takeBribe(500000000));
+// fraction.removeAllDeputies();
+fraction.showTotalCorruptionSum();

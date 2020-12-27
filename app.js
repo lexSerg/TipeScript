@@ -93,6 +93,10 @@ var Fraction = /** @class */ (function () {
         this.deputyList.splice(deputy, 1);
         return "\u0423\u0434\u0430\u043B\u0435\u043D \u0434\u0435\u043F\u0443\u0442\u0430\u0442 \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + deputy + " -\n         " + this.deputyList[deputy].firstName + "\n         " + this.deputyList[deputy].firstName + " ";
     };
+    Fraction.prototype.removeAllDeputies = function () {
+        this.deputyList = [];
+        console.log('Во фракции нет ни одного депутата');
+    };
     Fraction.prototype.removeCorruptionDeputy = function () {
         var isCorruptions = false;
         for (var i = 0; i < this.deputyList.length; i++) {
@@ -129,6 +133,14 @@ var Fraction = /** @class */ (function () {
             console.log(this.deputyList);
     };
     ;
+    Fraction.prototype.showTotalCorruptionSum = function () {
+        var sum = this.deputyList.reduce(function (acc, iter, index) {
+            if (!(index === 0))
+                acc.bribe = acc.bribe + iter.bribe;
+            return acc;
+        });
+        console.log("\u041E\u0431\u0449\u0430\u044F \u0441\u0443\u043C\u043C\u0430 \u0432\u0437\u044F\u0442\u043E\u043A \u0444\u0440\u0430\u043A\u0446\u0438\u0438: " + sum.bribe + "$");
+    };
     return Fraction;
 }());
 var depArr = [
@@ -157,4 +169,6 @@ fraction.showAllDeputy();
 // console.log('*****************');
 // fraction.showAllDeputy();
 // fraction.showMostCorruptionDeputy();
-console.log(fraction.deputyList[2].takeBribe(500000000));
+// console.log(fraction.deputyList[2].takeBribe(500000000));
+// fraction.removeAllDeputies();
+fraction.showTotalCorruptionSum();
