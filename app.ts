@@ -68,11 +68,25 @@ class Deputy extends Human implements IDeputy {
         return 'Ваше питання передано на розгляд'
     }
 };
-
-class Fraction {
+interface IFraction{
+    fractionName:string;
     deputyList: IDeputy[];
-    constructor(deputyList: IDeputy[]) {
-        this.deputyList = deputyList
+    addDeputy();
+    removeDeputy(deputy:number): string;
+    removeAllDeputies():void;
+    removeCorruptionDeputy(): void;
+    showMostCorruptionDeputy():void;
+    showMostCorruptionDeputy():void;
+    showAllDeputy();
+    showTotalCorruptionSum():void;
+};
+
+class Fraction implements IFraction{
+    fractionName: string;
+    deputyList: IDeputy[];
+    constructor(fractionName: string, deputyList: IDeputy[]) {
+        this.fractionName = fractionName;
+        this.deputyList = deputyList;
     };
     addDeputy(){
        let firstName = prompt('Введите имя депутата');
@@ -141,11 +155,28 @@ class Fraction {
             total = res.bribe;
             this.deputyList[0].bribe = firstElemBribe; //Потому как было мутировано значение bribe первого элемента
             //Не самое удачное решение но захотелось сделать через reduce()
-        console.log(`Общая сумма взяток фракции: ${total}$`);
+        console.log(`Общая сумма взяток фракции: ${total}$`);    
+    }
+}
+class VerhovnaRada {
+    fractionList: IFraction[];
+    constructor(fractionList: IFraction[]) {
+        this.fractionList = fractionList;
+    };
+    addFraction() :void {
+        let name:string = prompt('Введите название фракции')
+        const fraction = new Fraction(name, []);
+        this.fractionList.push(fraction);
+    };
+    removeFraction() : void {
+        let fractionNum: number = +prompt('Введите номер фракции для удаления');
+        if (fractionNum > this.fractionList.length) alert('Извините, но такой фракции нет в списке');
+        let deletedFractionName:string = this.fractionList[fractionNum].fractionName;
+        this.fractionList.splice(fractionNum, 1);
+        console.log(`Фракция под номером ${fractionNum} : ${deletedFractionName} успешно удалена`);
         
     }
 }
-
 let depArr = [
     {weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000000},
     {weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false},
@@ -167,7 +198,10 @@ for (let iter of depArr) {
 }
 
 
-let fraction = new Fraction(deputyArray);
+let fraction = new Fraction("Зеленые", deputyArray);
+let fractionArr:IFraction[] = [];
+fractionArr.push(fraction)
+const rada = new VerhovnaRada(fractionArr);
 // fraction.addDeputy();
 // fraction.addDeputy();
 fraction.showAllDeputy();
@@ -183,6 +217,13 @@ fraction.showAllDeputy();
 // fraction.showMostCorruptionDeputy();
 // console.log(fraction.deputyList[2].takeBribe(500000000));
 // fraction.removeAllDeputies();
-fraction.showMostCorruptionDeputy()
-fraction.showTotalCorruptionSum();
-fraction.showAllDeputy();
+// fraction.showMostCorruptionDeputy()
+// fraction.showTotalCorruptionSum();
+// fraction.showAllDeputy();
+console.log(rada);
+rada.fractionList;
+rada.addFraction();
+rada.addFraction();
+rada.removeFraction();
+console.log(rada.fractionList);
+;
