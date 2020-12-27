@@ -165,7 +165,12 @@ class VerhovnaRada {
         this.fractionList.push(fraction);
     };
     removeFraction(): void {
-        let fractionNum: number = +prompt('Введите номер фракции для удаления');
+        let keyChoise = prompt('Введите номер фракции для удаления');
+        if (keyChoise === null) {
+            console.log('Удаление отменено'); 
+            return
+        };
+        let fractionNum: number;
         if (fractionNum > this.fractionList.length && fractionNum < 0) alert('Извините, но такой фракции нет в списке');
         let deletedFractionName:string = this.fractionList[fractionNum].fractionName;
         this.fractionList.splice(fractionNum, 1);
@@ -262,7 +267,7 @@ function startRada() {
             rada.showAllFractions();
             break;
         case 4: 
-            rada.removeFraction();
+            rada.showFraction();
             break;
         default: alert('Выберите другое действие');
     };

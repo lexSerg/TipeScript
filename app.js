@@ -158,7 +158,14 @@ var VerhovnaRada = /** @class */ (function () {
     };
     ;
     VerhovnaRada.prototype.removeFraction = function () {
-        var fractionNum = +prompt('Введите номер фракции для удаления');
+        var keyChoise = prompt('Введите номер фракции для удаления');
+        console.log(keyChoise);
+        if (keyChoise === null) {
+            console.log('Удаление отменено');
+            return;
+        }
+        ;
+        var fractionNum;
         if (fractionNum > this.fractionList.length && fractionNum < 0)
             alert('Извините, но такой фракции нет в списке');
         var deletedFractionName = this.fractionList[fractionNum].fractionName;
@@ -247,7 +254,7 @@ function startRada() {
             rada.showAllFractions();
             break;
         case 4:
-            rada.removeFraction();
+            rada.showFraction();
             break;
         default: alert('Выберите другое действие');
     }
