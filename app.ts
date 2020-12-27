@@ -45,6 +45,7 @@ interface IDeputy{
     age: number,
     isBribetaker: boolean,
     bribe?: number,
+    takeBribe(money:number):string
 };
 class Deputy extends Human implements IDeputy {
     firstName: string;
@@ -158,7 +159,8 @@ fraction.showAllDeputy();
 // let dep1 = new Deputy(65, 154, 'FGf', 'DDDDDD', 65, true, 50);
 // console.log(dep1);
 //fraction.showAllDeputy();
-fraction.removeCorruptionDeputy();
-console.log('*****************');
-fraction.showAllDeputy();
-fraction.showMostCorruptionDeputy();
+// fraction.removeCorruptionDeputy();
+// console.log('*****************');
+// fraction.showAllDeputy();
+// fraction.showMostCorruptionDeputy();
+// console.log(fraction.deputyList[2].takeBribe(500000000));
