@@ -106,6 +106,23 @@ var Fraction = /** @class */ (function () {
             console.log('Коррупционеров исключили из фракции');
         console.log('Во фракции нет коррупционеров');
     };
+    Fraction.prototype.showMostCorruptionDeputy = function () {
+        if (this.deputyList.length === 0) {
+            console.log('Во фракции нет ни одного депутата');
+            return;
+        }
+        if (!this.deputyList.some(function (iter) { return iter.isBribetaker; })) {
+            console.log('Во фракции нет коррупционеров');
+            return;
+        }
+        var res = this.deputyList.reduce(function (acc, current) {
+            if (acc.bribe < current.bribe)
+                acc = current;
+            return acc;
+        });
+        console.log("\u0421\u0430\u043C\u044B\u0439 \u043A\u0440\u0443\u043F\u043D\u044B\u0439 \u0432\u0437\u044F\u0442\u043E\u0447\u043D\u0438\u043A: " + res.firstName + " " + res.lastName);
+        console.log(res);
+    };
     Fraction.prototype.showAllDeputy = function () {
         (this.deputyList.length === 0) ?
             console.log('Во фракции нет ни одного депутата') :
@@ -116,7 +133,7 @@ var Fraction = /** @class */ (function () {
 }());
 var depArr = [
     { weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000000 },
-    { weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: true },
+    { weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false },
     { weight: 50, height: 167, firstName: 'Юлия', lastName: 'Тимошенко', age: 60, isBribetaker: true, bribe: 200000000 },
     { weight: 106, height: 181, firstName: 'Петр', lastName: 'Порошенко', age: 55, isBribetaker: true, bribe: 500000000 },
     { weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 10000000 },
@@ -139,3 +156,4 @@ fraction.showAllDeputy();
 fraction.removeCorruptionDeputy();
 console.log('*****************');
 fraction.showAllDeputy();
+fraction.showMostCorruptionDeputy();

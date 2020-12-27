@@ -103,6 +103,23 @@ class Fraction {
         if (isCorruptions) console.log('Коррупционеров исключили из фракции');
         console.log('Во фракции нет коррупционеров');
     }
+    showMostCorruptionDeputy():void {
+        if (this.deputyList.length === 0) {
+            console.log('Во фракции нет ни одного депутата');
+            return
+        }
+        if (!this.deputyList.some(iter => iter.isBribetaker)) {
+            console.log('Во фракции нет коррупционеров');
+            return
+        }
+        let res = this.deputyList.reduce((acc,current) => {
+            if (acc.bribe < current.bribe) acc = current;
+            return acc
+        });
+        console.log(`Самый крупный взяточник: ${res.firstName} ${res.lastName}`);
+        console.log(res);
+        
+    }
     showAllDeputy(){
         (this.deputyList.length === 0) ? 
         console.log('Во фракции нет ни одного депутата'):
@@ -112,7 +129,7 @@ class Fraction {
 
 let depArr = [
     {weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000000},
-    {weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: true},
+    {weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false},
     {weight: 50, height: 167, firstName: 'Юлия', lastName: 'Тимошенко', age: 60, isBribetaker: true, bribe: 200000000},
     {weight: 106, height: 181, firstName: 'Петр', lastName: 'Порошенко', age: 55, isBribetaker: true, bribe: 500000000},
     {weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 10000000},
@@ -143,5 +160,5 @@ fraction.showAllDeputy();
 //fraction.showAllDeputy();
 fraction.removeCorruptionDeputy();
 console.log('*****************');
-
 fraction.showAllDeputy();
+fraction.showMostCorruptionDeputy();
