@@ -132,12 +132,16 @@ class Fraction {
         console.log(this.deputyList);    
     };
     showTotalCorruptionSum():void {
-        const sum = this.deputyList.reduce((acc, iter, index) => {
+            const firstElemBribe = this.deputyList[0].bribe;
+            let total:number;
+            let res = this.deputyList.reduce((acc, iter, index) => {
             if (!(index === 0)) acc.bribe = acc.bribe + iter.bribe
             return acc
-        }
-        )
-        console.log(`Общая сумма взяток фракции: ${sum.bribe}$`);
+            });
+            total = res.bribe;
+            this.deputyList[0].bribe = firstElemBribe; //Потому как было мутировано значение bribe первого элемента
+            //Не самое удачное решение но захотелось сделать через reduce()
+        console.log(`Общая сумма взяток фракции: ${total}$`);
         
     }
 }
@@ -179,4 +183,6 @@ fraction.showAllDeputy();
 // fraction.showMostCorruptionDeputy();
 // console.log(fraction.deputyList[2].takeBribe(500000000));
 // fraction.removeAllDeputies();
+fraction.showMostCorruptionDeputy()
 fraction.showTotalCorruptionSum();
+fraction.showAllDeputy();

@@ -134,12 +134,16 @@ var Fraction = /** @class */ (function () {
     };
     ;
     Fraction.prototype.showTotalCorruptionSum = function () {
-        var sum = this.deputyList.reduce(function (acc, iter, index) {
+        var firstElemBribe = this.deputyList[0].bribe;
+        var total;
+        var res = this.deputyList.reduce(function (acc, iter, index) {
             if (!(index === 0))
                 acc.bribe = acc.bribe + iter.bribe;
             return acc;
         });
-        console.log("\u041E\u0431\u0449\u0430\u044F \u0441\u0443\u043C\u043C\u0430 \u0432\u0437\u044F\u0442\u043E\u043A \u0444\u0440\u0430\u043A\u0446\u0438\u0438: " + sum.bribe + "$");
+        total = res.bribe;
+        this.deputyList[0].bribe = firstElemBribe; //Потому что было мутировано значение bribe первого элемента
+        console.log("\u041E\u0431\u0449\u0430\u044F \u0441\u0443\u043C\u043C\u0430 \u0432\u0437\u044F\u0442\u043E\u043A \u0444\u0440\u0430\u043A\u0446\u0438\u0438: " + total + "$");
     };
     return Fraction;
 }());
@@ -171,4 +175,6 @@ fraction.showAllDeputy();
 // fraction.showMostCorruptionDeputy();
 // console.log(fraction.deputyList[2].takeBribe(500000000));
 // fraction.removeAllDeputies();
+fraction.showMostCorruptionDeputy();
 fraction.showTotalCorruptionSum();
+fraction.showAllDeputy();
