@@ -29,15 +29,10 @@ var __extends = (this && this.__extends) || (function () {
 //     клави певної цифри ми попадаєио в інше меню якщо ми нажали 1 то нам промалюється в консолі
 //     таке меню 1-додати фракцію 2-вивести всі фракції 3-вивести найбільшого хабарника меню робимо
 //РОБИТИ НА ТС !!З інтрефейсами. типами і енамками!
-// let startRada =  document.getElementById('rada');
-// // console.log(startRada);
-// startRada.onclick = () => {
-//  document.write('Запуск');
-// //  alert('Start');
-// // confirm('Рада');
-// // confirm('L');
-// // prompt('Депутат', 'Рада')
-// }
+var startRadaBtn = document.getElementById('rada');
+startRadaBtn.onclick = function () {
+    startRada();
+};
 var Human = /** @class */ (function () {
     function Human(weight, height) {
         this.weight = weight;
@@ -91,7 +86,8 @@ var Fraction = /** @class */ (function () {
         this.deputyList.push(deput);
     };
     ;
-    Fraction.prototype.removeDeputy = function (deputy) {
+    Fraction.prototype.removeDeputy = function () {
+        var deputy = +prompt('Введите номер депутата из списка для удаления');
         this.deputyList.splice(deputy, 1);
         return "\u0423\u0434\u0430\u043B\u0435\u043D \u0434\u0435\u043F\u0443\u0442\u0430\u0442 \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + deputy + " -\n         " + this.deputyList[deputy].firstName + "\n         " + this.deputyList[deputy].firstName + " ";
     };
@@ -169,12 +165,17 @@ var VerhovnaRada = /** @class */ (function () {
         this.fractionList.splice(fractionNum, 1);
         console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + fractionNum + " - '" + deletedFractionName + "' \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u0430");
     };
+    VerhovnaRada.prototype.showAllFractions = function () {
+        console.log(rada.fractionList);
+    };
     VerhovnaRada.prototype.showFraction = function () {
         var fractionNum = +prompt('Введите номер фракции для показа');
         if (fractionNum > this.fractionList.length && fractionNum < 0)
             alert('Извините, но такой фракции нет в списке');
         console.log("\u0412\u044B\u0432\u0435\u0434\u0435\u043D\u0430 \u0444\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + fractionNum + " - '" + this.fractionList[fractionNum].fractionName + "' :");
         console.log(this.fractionList[fractionNum]);
+    };
+    VerhovnaRada.prototype.removeDeputyFromFraction = function () {
     };
     return VerhovnaRada;
 }());
@@ -190,13 +191,13 @@ for (var _i = 0, depArr_1 = depArr; _i < depArr_1.length; _i++) {
     var iter = depArr_1[_i];
     deputyArray.push(new Deputy(iter.weight, iter.height, iter.firstName, iter.lastName, iter.age, iter.isBribetaker, iter.bribe));
 }
-var fraction = new Fraction("Зеленые", deputyArray);
-var fractionArr = [];
-fractionArr.push(fraction);
-var rada = new VerhovnaRada(fractionArr);
+// let fraction = new Fraction("Зеленые", deputyArray);
+// let fractionArr:IFraction[] = [];
+// fractionArr.push(fraction)
+// const rada = new VerhovnaRada(fractionArr);
 // fraction.addDeputy();
 // fraction.addDeputy();
-fraction.showAllDeputy();
+// fraction.showAllDeputy();
 // console.log(deputyList[2]);
 // console.log(fraction.deputyList[2]);
 //fraction.addDeputy();
@@ -212,10 +213,45 @@ fraction.showAllDeputy();
 // fraction.showMostCorruptionDeputy()
 // fraction.showTotalCorruptionSum();
 // fraction.showAllDeputy();
-console.log(rada);
-rada.fractionList;
-rada.addFraction();
-rada.addFraction();
-rada.removeFraction();
-console.log(rada.fractionList);
-rada.showFraction();
+// console.log(rada);
+// rada.fractionList;
+// rada.addFraction();
+// rada.addFraction();
+// rada.removeFraction();
+// console.log(rada.fractionList);
+// rada.showFraction()
+var fractionArr = [];
+var rada = new VerhovnaRada(fractionArr);
+function startRada() {
+    console.log('Верховна рада');
+    console.log('1 - додати фракцію');
+    console.log('2 - видалити фракцію');
+    console.log('3 - вивести всі фракції');
+    console.log('4 - вивести конкретну фракцію');
+    console.log('5 - додати депутата до фракції');
+    console.log('5 - видалити депутата з фракції');
+    console.log('7 - вивести всіх хабарників фракції');
+    console.log('8 - вивести найбільшого хабарника у фрації');
+    console.log('9 - вивести найбільшого хабарника верховної ради');
+    console.log('10 - вивести всіх депутатів фракції');
+    console.log('11 - вивести найбільшого хабарника');
+    var choise = +prompt('Выберите действие');
+    switch (choise) {
+        case 1:
+            rada.addFraction();
+            break;
+        case 2:
+            rada.removeFraction();
+            break;
+        case 3:
+            rada.showAllFractions();
+            break;
+        case 4:
+            rada.removeFraction();
+            break;
+        default: alert('Выберите другое действие');
+    }
+    ;
+    console.log('*********************');
+}
+startRada();

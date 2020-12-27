@@ -19,15 +19,10 @@
 
 //РОБИТИ НА ТС !!З інтрефейсами. типами і енамками!
 
-// let startRada =  document.getElementById('rada');
-// // console.log(startRada);
-// startRada.onclick = () => {
-//  document.write('Запуск');
-// //  alert('Start');
-// // confirm('Рада');
-// // confirm('L');
-// // prompt('Депутат', 'Рада')
-// }
+let startRadaBtn =  document.getElementById('rada');
+startRadaBtn.onclick = () => {
+    startRada();
+}
 
 abstract class Human {
     weight: number;
@@ -100,7 +95,8 @@ class Fraction implements IFraction{
        let deput =  new Deputy(weight, height, firstName, lastName, age, isBribetaker, bribe);
        this.deputyList.push(deput);
     };
-    removeDeputy(deputy:number): string{
+    removeDeputy(): string{
+        let deputy:number = +prompt('Введите номер депутата из списка для удаления')
         this.deputyList.splice(deputy, 1)
         return `Удален депутат под номером ${deputy} -
          ${this.deputyList[deputy].firstName}
@@ -168,19 +164,23 @@ class VerhovnaRada {
         const fraction = new Fraction(name, []);
         this.fractionList.push(fraction);
     };
-    removeFraction() : void {
+    removeFraction(): void {
         let fractionNum: number = +prompt('Введите номер фракции для удаления');
         if (fractionNum > this.fractionList.length && fractionNum < 0) alert('Извините, но такой фракции нет в списке');
         let deletedFractionName:string = this.fractionList[fractionNum].fractionName;
         this.fractionList.splice(fractionNum, 1);
         console.log(`Фракция под номером ${fractionNum} - '${deletedFractionName}' успешно удалена`);
     }
-    showFraction() : void {
+    showAllFractions(): void{
+        console.log(rada.fractionList);
+    }
+    showFraction(): void {
         let fractionNum: number = +prompt('Введите номер фракции для показа');
         if (fractionNum > this.fractionList.length && fractionNum < 0) alert('Извините, но такой фракции нет в списке');
         console.log(`Выведена фракция под номером ${fractionNum} - '${this.fractionList[fractionNum].fractionName}' :`);
         console.log(this.fractionList[fractionNum]);
-        
+    }
+    removeDeputyFromFraction() : void {
     }
 }
 let depArr = [
@@ -204,13 +204,13 @@ for (let iter of depArr) {
 }
 
 
-let fraction = new Fraction("Зеленые", deputyArray);
-let fractionArr:IFraction[] = [];
-fractionArr.push(fraction)
-const rada = new VerhovnaRada(fractionArr);
+// let fraction = new Fraction("Зеленые", deputyArray);
+// let fractionArr:IFraction[] = [];
+// fractionArr.push(fraction)
+// const rada = new VerhovnaRada(fractionArr);
 // fraction.addDeputy();
 // fraction.addDeputy();
-fraction.showAllDeputy();
+// fraction.showAllDeputy();
 // console.log(deputyList[2]);
 // console.log(fraction.deputyList[2]);
 //fraction.addDeputy();
@@ -226,10 +226,47 @@ fraction.showAllDeputy();
 // fraction.showMostCorruptionDeputy()
 // fraction.showTotalCorruptionSum();
 // fraction.showAllDeputy();
-console.log(rada);
-rada.fractionList;
-rada.addFraction();
-rada.addFraction();
-rada.removeFraction();
-console.log(rada.fractionList);
-rada.showFraction()
+// console.log(rada);
+// rada.fractionList;
+// rada.addFraction();
+// rada.addFraction();
+// rada.removeFraction();
+// console.log(rada.fractionList);
+// rada.showFraction()
+
+let fractionArr:IFraction[] = [];
+const rada = new VerhovnaRada(fractionArr);
+
+function startRada() {
+    console.log('Верховна рада');
+    console.log('1 - додати фракцію');
+    console.log('2 - видалити фракцію');
+    console.log('3 - вивести всі фракції');
+    console.log('4 - вивести конкретну фракцію');
+    console.log('5 - додати депутата до фракції');
+    console.log('5 - видалити депутата з фракції');
+    console.log('7 - вивести всіх хабарників фракції');
+    console.log('8 - вивести найбільшого хабарника у фрації');
+    console.log('9 - вивести найбільшого хабарника верховної ради');
+    console.log('10 - вивести всіх депутатів фракції');
+    console.log('11 - вивести найбільшого хабарника');
+    let choise:number = +prompt('Выберите действие');
+    switch(choise) {
+        case 1: 
+            rada.addFraction();
+            break;
+        case 2: 
+            rada.removeFraction();
+            break;
+        case 3: 
+            rada.showAllFractions();
+            break;
+        case 4: 
+            rada.removeFraction();
+            break;
+        default: alert('Выберите другое действие');
+    };
+    console.log('*********************');
+    
+}
+startRada();
