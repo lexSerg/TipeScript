@@ -163,11 +163,18 @@ var VerhovnaRada = /** @class */ (function () {
     ;
     VerhovnaRada.prototype.removeFraction = function () {
         var fractionNum = +prompt('Введите номер фракции для удаления');
-        if (fractionNum > this.fractionList.length)
+        if (fractionNum > this.fractionList.length && fractionNum < 0)
             alert('Извините, но такой фракции нет в списке');
         var deletedFractionName = this.fractionList[fractionNum].fractionName;
         this.fractionList.splice(fractionNum, 1);
-        console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + fractionNum + " : " + deletedFractionName + " \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u0430");
+        console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + fractionNum + " - '" + deletedFractionName + "' \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u0430");
+    };
+    VerhovnaRada.prototype.showFraction = function () {
+        var fractionNum = +prompt('Введите номер фракции для показа');
+        if (fractionNum > this.fractionList.length && fractionNum < 0)
+            alert('Извините, но такой фракции нет в списке');
+        console.log("\u0412\u044B\u0432\u0435\u0434\u0435\u043D\u0430 \u0444\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + fractionNum + " - '" + this.fractionList[fractionNum].fractionName + "' :");
+        console.log(this.fractionList[fractionNum]);
     };
     return VerhovnaRada;
 }());
@@ -211,4 +218,4 @@ rada.addFraction();
 rada.addFraction();
 rada.removeFraction();
 console.log(rada.fractionList);
-;
+rada.showFraction();
