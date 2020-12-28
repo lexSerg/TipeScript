@@ -175,6 +175,7 @@ class VerhovnaRada {
         let name:string = prompt('Введите название фракции')
         const fraction = new Fraction(name, []);
         this.fractionList.push(fraction);
+        console.log(`Фракция '${name}' добавлена в Раду`);
     };
     removeFraction(): void {
         this.showAllFractions();
@@ -228,16 +229,14 @@ class VerhovnaRada {
         this.showAllFractions();
         let choise:number = +prompt('Выбирите фракцию для поиска самого жадного депутата') - 1;
         if (this.isDeputiesInFraction(choise)) return;
-        let arr = JSON.parse(JSON.stringify(this.fractionList[choise].deputyList));
-        if (!this.isCorruoptioDeputiesInFraction(arr)) return;
-        let coruptionDeputy = arr.reduce((acc, iter) => {
-            if (acc.bribe < iter.bribe) acc = iter;
-            return acc
-        })
-        console.log(coruptionDeputy);
-        console.log(`Самый жадный депутат фракции - '${coruptionDeputy.firstName} ${coruptionDeputy.lastName}'`);
-        
+        if (!this.isCorruoptioDeputiesInFraction(this.fractionList[choise].deputyList)) return;
+        const mostCorruptionDeputy:IDeputy = this.findMostCorruptionDeputyInFraction(this.fractionList, choise)
+        console.log(mostCorruptionDeputy);
+        console.log(`Самый жадный депутат фракции - '${mostCorruptionDeputy.firstName} ${mostCorruptionDeputy.lastName}'`);     
     };
+    showMostCorruptionDeputyInRada():void{
+        this.fractionList
+    }
 
     // Вспомагательные служебные методы
     isDeputiesInFraction(num:number):boolean{
@@ -254,6 +253,15 @@ class VerhovnaRada {
             console.log('Во фракции нет взяточников')
             return false;
     };
+    findMostCorruptionDeputyInFraction(arr:IFraction[], num:number) : IDeputy{
+        const bufferArr = JSON.parse(JSON.stringify(arr[num].deputyList));
+        let res = bufferArr.reduce((acc, iter) => {
+            if (acc.bribe < iter.bribe) acc = iter;
+            return acc
+        })
+        return res;
+    }
+
 }
 // let fraction = new Fraction("Зеленые", deputyArray);
 // let fractionArr:IFraction[] = [];
@@ -355,7 +363,6 @@ function startRada() {
     console.log('8 - вивести найбільшого хабарника у фрації');
     console.log('9 - вивести найбільшого хабарника верховної ради');
     console.log('10 - вивести всіх депутатів фракції');
-    console.log('11 - вивести найбільшого хабарника');
     let choise:number = +prompt('Выберите действие');
     switch(choise) {
         case 1: 

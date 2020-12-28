@@ -169,6 +169,7 @@ var VerhovnaRada = /** @class */ (function () {
         var name = prompt('Введите название фракции');
         var fraction = new Fraction(name, []);
         this.fractionList.push(fraction);
+        console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F " + name + " \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0430 \u0432 \u0420\u0430\u0434\u0443");
     };
     ;
     VerhovnaRada.prototype.removeFraction = function () {
@@ -228,18 +229,16 @@ var VerhovnaRada = /** @class */ (function () {
         var choise = +prompt('Выбирите фракцию для поиска самого жадного депутата') - 1;
         if (this.isDeputiesInFraction(choise))
             return;
-        var arr = JSON.parse(JSON.stringify(this.fractionList[choise].deputyList));
-        if (!this.isCorruoptioDeputiesInFraction(arr))
+        if (!this.isCorruoptioDeputiesInFraction(this.fractionList[choise].deputyList))
             return;
-        var coruptionDeputy = arr.reduce(function (acc, iter) {
-            if (acc.bribe < iter.bribe)
-                acc = iter;
-            return acc;
-        });
-        console.log(coruptionDeputy);
-        console.log("\u0421\u0430\u043C\u044B\u0439 \u0436\u0430\u0434\u043D\u044B\u0439 \u0434\u0435\u043F\u0443\u0442\u0430\u0442 \u0444\u0440\u0430\u043A\u0446\u0438\u0438 - '" + coruptionDeputy.firstName + " " + coruptionDeputy.lastName + "'");
+        var mostCorruptionDeputy = this.findMostCorruptionDeputyInFraction(this.fractionList, choise);
+        console.log(mostCorruptionDeputy);
+        console.log("\u0421\u0430\u043C\u044B\u0439 \u0436\u0430\u0434\u043D\u044B\u0439 \u0434\u0435\u043F\u0443\u0442\u0430\u0442 \u0444\u0440\u0430\u043A\u0446\u0438\u0438 - '" + mostCorruptionDeputy.firstName + " " + mostCorruptionDeputy.lastName + "'");
     };
     ;
+    VerhovnaRada.prototype.showMostCorruptionDeputyInRada = function () {
+        this.fractionList;
+    };
     // Вспомагательные служебные методы
     VerhovnaRada.prototype.isDeputiesInFraction = function (num) {
         if (this.fractionList[num].deputyList.length === 0) {
@@ -259,6 +258,15 @@ var VerhovnaRada = /** @class */ (function () {
         return false;
     };
     ;
+    VerhovnaRada.prototype.findMostCorruptionDeputyInFraction = function (arr, num) {
+        var bufferArr = JSON.parse(JSON.stringify(arr[num].deputyList));
+        var res = bufferArr.reduce(function (acc, iter) {
+            if (acc.bribe < iter.bribe)
+                acc = iter;
+            return acc;
+        });
+        return res;
+    };
     return VerhovnaRada;
 }());
 // let fraction = new Fraction("Зеленые", deputyArray);
@@ -352,7 +360,6 @@ function startRada() {
     console.log('8 - вивести найбільшого хабарника у фрації');
     console.log('9 - вивести найбільшого хабарника верховної ради');
     console.log('10 - вивести всіх депутатів фракції');
-    console.log('11 - вивести найбільшого хабарника');
     var choise = +prompt('Выберите действие');
     switch (choise) {
         case 1:
