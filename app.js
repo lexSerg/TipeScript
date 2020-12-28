@@ -164,6 +164,7 @@ var VerhovnaRada = /** @class */ (function () {
         this.fractionList = fractionList;
     }
     ;
+    // Основные методы
     VerhovnaRada.prototype.addFraction = function () {
         var name = prompt('Введите название фракции');
         var fraction = new Fraction(name, []);
@@ -208,21 +209,56 @@ var VerhovnaRada = /** @class */ (function () {
         var fraction = +prompt('Выбирите фракцию для удаления депутата') - 1;
         this.fractionList[fraction].removeDeputy();
     };
-    VerhovnaRada.prototype.showFractionsCoruptionDeputies = function () {
+    VerhovnaRada.prototype.showFractionCoruptionDeputies = function () {
         this.showAllFractions();
         var choise = +prompt('Выбирите фракцию для поиска взяточников') - 1;
-        var coruptionsDeputies = this.fractionList[choise].deputyList.filter(function (iter) { return iter.isBribetaker; });
-        if (coruptionsDeputies.length === 0) {
-            console.log("\u0412\u043E \u0444\u0440\u0430\u043A\u0446\u0438\u0438 '" + this.fractionList[choise].fractionName + "' \u043D\u0435\u0442 \u0432\u0437\u044F\u0442\u043E\u0447\u043D\u0438\u043A\u043E\u0432");
+        if (this.isDeputiesInFraction(choise))
             return;
-        }
-        ;
+        var coruptionsDeputies = this.fractionList[choise].deputyList.filter(function (iter) { return iter.isBribetaker; });
+        if (!this.isCorruoptioDeputiesInFraction(coruptionsDeputies))
+            return;
         console.log(coruptionsDeputies);
         console.log("\u0412\u043E \u0444\u0440\u0430\u043A\u0446\u0438\u0438 '" + this.fractionList[choise].fractionName + "' " + coruptionsDeputies.length + " \u0432\u0437\u044F\u0442\u043E\u0447\u043D\u0438\u043A(\u043E\u0432)");
         coruptionsDeputies.forEach(function (iter, index) {
             console.log(index + 1 + ") " + iter.firstName + " " + iter.lastName);
         });
     };
+    VerhovnaRada.prototype.showMostFractionCoruptionDeputy = function () {
+        this.showAllFractions();
+        var choise = +prompt('Выбирите фракцию для поиска самого жадного депутата') - 1;
+        if (this.isDeputiesInFraction(choise))
+            return;
+        var arr = JSON.parse(JSON.stringify(this.fractionList[choise].deputyList));
+        if (!this.isCorruoptioDeputiesInFraction(arr))
+            return;
+        var coruptionDeputy = arr.reduce(function (acc, iter) {
+            if (acc.bribe < iter.bribe)
+                acc = iter;
+            return acc;
+        });
+        console.log(coruptionDeputy);
+        console.log("\u0421\u0430\u043C\u044B\u0439 \u0436\u0430\u0434\u043D\u044B\u0439 \u0434\u0435\u043F\u0443\u0442\u0430\u0442 \u0444\u0440\u0430\u043A\u0446\u0438\u0438 - '" + coruptionDeputy.firstName + " " + coruptionDeputy.lastName + "'");
+    };
+    ;
+    // Вспомагательные служебные методы
+    VerhovnaRada.prototype.isDeputiesInFraction = function (num) {
+        if (this.fractionList[num].deputyList.length === 0) {
+            console.log('Во фракции нет депутатов');
+            return true;
+        }
+        return false;
+    };
+    ;
+    VerhovnaRada.prototype.isCorruoptioDeputiesInFraction = function (arr) {
+        for (var _i = 0, arr_1 = arr; _i < arr_1.length; _i++) {
+            var iter = arr_1[_i];
+            if (iter.bribe)
+                return true;
+        }
+        console.log('Во фракции нет взяточников');
+        return false;
+    };
+    ;
     return VerhovnaRada;
 }());
 // let fraction = new Fraction("Зеленые", deputyArray);
@@ -265,7 +301,7 @@ function addDefaultData() {
         { weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 15000 },
     ];
     var depArr2 = [
-        { weight: 88, height: 173, firstName: 'Валерия', lastName: 'Звягенцев', age: 19, isBribetaker: true, bribe: 500 },
+        { weight: 88, height: 173, firstName: 'Валерий', lastName: 'Звягенцев', age: 19, isBribetaker: true, bribe: 500 },
         { weight: 65, height: 179, firstName: 'Рик', lastName: 'Санчес', age: 70, isBribetaker: true, bribe: 7000 },
         { weight: 45, height: 142, firstName: 'Морти', lastName: 'Смит', age: 14, isBribetaker: false },
         { weight: 35, height: 162, firstName: 'Дональд', lastName: 'Дак', age: 25, isBribetaker: true, bribe: 200 },
@@ -282,8 +318,8 @@ function addDefaultData() {
     function fillDeputyDefaultArray(arr) {
         var resInner = [];
         var resOuter = [];
-        for (var _i = 0, arr_1 = arr; _i < arr_1.length; _i++) {
-            var iter = arr_1[_i];
+        for (var _i = 0, arr_2 = arr; _i < arr_2.length; _i++) {
+            var iter = arr_2[_i];
             iter.forEach(function (curr) {
                 resInner.push(new Deputy(curr.weight, curr.height, curr.firstName, curr.lastName, curr.age, curr.isBribetaker, curr.bribe));
             });
@@ -338,7 +374,10 @@ function startRada() {
             rada.removeDeputyFromFraction();
             break;
         case 7:
-            rada.showFractionsCoruptionDeputies();
+            rada.showFractionCoruptionDeputies();
+            break;
+        case 8:
+            rada.showMostFractionCoruptionDeputy();
             break;
         default: alert('Выберите другое действие');
     }

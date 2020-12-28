@@ -170,6 +170,7 @@ class VerhovnaRada {
     constructor(fractionList: IFraction[]) {
         this.fractionList = fractionList;
     };
+    // Основные методы
     addFraction() :void {
         let name:string = prompt('Введите название фракции')
         const fraction = new Fraction(name, []);
@@ -214,19 +215,45 @@ class VerhovnaRada {
     showFractionCoruptionDeputies():void {
         this.showAllFractions();
         let choise:number = +prompt('Выбирите фракцию для поиска взяточников') - 1;
+        if (this.isDeputiesInFraction(choise)) return;
         const coruptionsDeputies = this.fractionList[choise].deputyList.filter(iter => iter.isBribetaker);
-        if (coruptionsDeputies.length === 0) {
-            console.log(`Во фракции '${this.fractionList[choise].fractionName}' нет взяточников`);
-            return;
-        };
+        if (!this.isCorruoptioDeputiesInFraction(coruptionsDeputies)) return;
         console.log(coruptionsDeputies);
         console.log(`Во фракции '${this.fractionList[choise].fractionName}' ${coruptionsDeputies.length} взяточник(ов)`);
         coruptionsDeputies.forEach((iter, index) => {
             console.log(`${index + 1}) ${iter.firstName} ${iter.lastName}`);        
         })
-        
-
     }
+    showMostFractionCoruptionDeputy():void {
+        this.showAllFractions();
+        let choise:number = +prompt('Выбирите фракцию для поиска самого жадного депутата') - 1;
+        if (this.isDeputiesInFraction(choise)) return;
+        let arr = JSON.parse(JSON.stringify(this.fractionList[choise].deputyList));
+        if (!this.isCorruoptioDeputiesInFraction(arr)) return;
+        let coruptionDeputy = arr.reduce((acc, iter) => {
+            if (acc.bribe < iter.bribe) acc = iter;
+            return acc
+        })
+        console.log(coruptionDeputy);
+        console.log(`Самый жадный депутат фракции - '${coruptionDeputy.firstName} ${coruptionDeputy.lastName}'`);
+        
+    };
+
+    // Вспомагательные служебные методы
+    isDeputiesInFraction(num:number):boolean{
+        if (this.fractionList[num].deputyList.length === 0) {
+            console.log('Во фракции нет депутатов');
+            return true;
+        }
+        return false;
+    };
+    isCorruoptioDeputiesInFraction(arr:IDeputy[]):boolean{
+            for (let iter of arr) {
+                if (iter.bribe) return true;
+            }
+            console.log('Во фракции нет взяточников')
+            return false;
+    };
 }
 // let fraction = new Fraction("Зеленые", deputyArray);
 // let fractionArr:IFraction[] = [];
@@ -352,6 +379,10 @@ function startRada() {
         case 7: 
             rada.showFractionCoruptionDeputies();
             break;
+        case 8: 
+            rada.showMostFractionCoruptionDeputy();
+            break;
+            
         default: alert('Выберите другое действие');
         
     };
