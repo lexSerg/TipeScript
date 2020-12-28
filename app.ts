@@ -211,6 +211,22 @@ class VerhovnaRada {
         let fraction:number = +prompt('Выбирите фракцию для удаления депутата') - 1;
         this.fractionList[fraction].removeDeputy();
     }
+    showFractionCoruptionDeputies():void {
+        this.showAllFractions();
+        let choise:number = +prompt('Выбирите фракцию для поиска взяточников') - 1;
+        const coruptionsDeputies = this.fractionList[choise].deputyList.filter(iter => iter.isBribetaker);
+        if (coruptionsDeputies.length === 0) {
+            console.log(`Во фракции '${this.fractionList[choise].fractionName}' нет взяточников`);
+            return;
+        };
+        console.log(coruptionsDeputies);
+        console.log(`Во фракции '${this.fractionList[choise].fractionName}' ${coruptionsDeputies.length} взяточник(ов)`);
+        coruptionsDeputies.forEach((iter, index) => {
+            console.log(`${index + 1}) ${iter.firstName} ${iter.lastName}`);        
+        })
+        
+
+    }
 }
 // let fraction = new Fraction("Зеленые", deputyArray);
 // let fractionArr:IFraction[] = [];
@@ -254,7 +270,7 @@ function addDefaultData() {
         {weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 15000},
     ];
     const depArr2 = [
-        {weight: 88, height: 173, firstName: 'Валерия', lastName: 'Звягенцев', age: 19, isBribetaker: true, bribe: 500},
+        {weight: 88, height: 173, firstName: 'Валерий', lastName: 'Звягенцев', age: 19, isBribetaker: true, bribe: 500},
         {weight: 65, height: 179, firstName: 'Рик', lastName: 'Санчес', age: 70, isBribetaker: true, bribe: 7000},
         {weight: 45, height: 142, firstName: 'Морти', lastName: 'Смит', age: 14, isBribetaker: false},
         {weight: 35, height: 162, firstName: 'Дональд', lastName: 'Дак', age: 25, isBribetaker: true, bribe: 200},
@@ -333,7 +349,11 @@ function startRada() {
         case 6: 
             rada.removeDeputyFromFraction();
             break;
+        case 7: 
+            rada.showFractionCoruptionDeputies();
+            break;
         default: alert('Выберите другое действие');
+        
     };
     console.log('*********************');
     

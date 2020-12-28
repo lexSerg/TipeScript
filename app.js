@@ -208,6 +208,21 @@ var VerhovnaRada = /** @class */ (function () {
         var fraction = +prompt('Выбирите фракцию для удаления депутата') - 1;
         this.fractionList[fraction].removeDeputy();
     };
+    VerhovnaRada.prototype.showFractionsCoruptionDeputies = function () {
+        this.showAllFractions();
+        var choise = +prompt('Выбирите фракцию для поиска взяточников') - 1;
+        var coruptionsDeputies = this.fractionList[choise].deputyList.filter(function (iter) { return iter.isBribetaker; });
+        if (coruptionsDeputies.length === 0) {
+            console.log("\u0412\u043E \u0444\u0440\u0430\u043A\u0446\u0438\u0438 '" + this.fractionList[choise].fractionName + "' \u043D\u0435\u0442 \u0432\u0437\u044F\u0442\u043E\u0447\u043D\u0438\u043A\u043E\u0432");
+            return;
+        }
+        ;
+        console.log(coruptionsDeputies);
+        console.log("\u0412\u043E \u0444\u0440\u0430\u043A\u0446\u0438\u0438 '" + this.fractionList[choise].fractionName + "' " + coruptionsDeputies.length + " \u0432\u0437\u044F\u0442\u043E\u0447\u043D\u0438\u043A(\u043E\u0432)");
+        coruptionsDeputies.forEach(function (iter, index) {
+            console.log(index + 1 + ") " + iter.firstName + " " + iter.lastName);
+        });
+    };
     return VerhovnaRada;
 }());
 // let fraction = new Fraction("Зеленые", deputyArray);
@@ -321,6 +336,9 @@ function startRada() {
             break;
         case 6:
             rada.removeDeputyFromFraction();
+            break;
+        case 7:
+            rada.showFractionsCoruptionDeputies();
             break;
         default: alert('Выберите другое действие');
     }
