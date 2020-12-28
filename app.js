@@ -30,8 +30,13 @@ var __extends = (this && this.__extends) || (function () {
 //     таке меню 1-додати фракцію 2-вивести всі фракції 3-вивести найбільшого хабарника меню робимо
 //РОБИТИ НА ТС !!З інтрефейсами. типами і енамками!
 var startRadaBtn = document.getElementById('rada');
+var radaData = document.getElementById('radaData');
 startRadaBtn.onclick = function () {
     startRada();
+};
+radaData.onclick = function () {
+    addDefaultData();
+    radaData.classList.add('hidden');
 };
 var Human = /** @class */ (function () {
     function Human(weight, height) {
@@ -159,7 +164,6 @@ var VerhovnaRada = /** @class */ (function () {
     ;
     VerhovnaRada.prototype.removeFraction = function () {
         var keyChoise = prompt('Введите номер фракции для удаления');
-        console.log(keyChoise);
         if (keyChoise === null) {
             console.log('Удаление отменено');
             return;
@@ -174,6 +178,9 @@ var VerhovnaRada = /** @class */ (function () {
     };
     VerhovnaRada.prototype.showAllFractions = function () {
         console.log(rada.fractionList);
+        this.fractionList.forEach(function (iter, index) {
+            console.log(index + 1 + ") \u0424\u0440\u0430\u043A\u0446\u0438\u044F: '" + iter.fractionName + "'");
+        });
     };
     VerhovnaRada.prototype.showFraction = function () {
         var fractionNum = +prompt('Введите номер фракции для показа');
@@ -182,22 +189,28 @@ var VerhovnaRada = /** @class */ (function () {
         console.log("\u0412\u044B\u0432\u0435\u0434\u0435\u043D\u0430 \u0444\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + fractionNum + " - '" + this.fractionList[fractionNum].fractionName + "' :");
         console.log(this.fractionList[fractionNum]);
     };
-    VerhovnaRada.prototype.removeDeputyFromFraction = function () {
+    VerhovnaRada.prototype.addDeputyToFraction = function () {
+        this.showAllFractions();
+        var fraction = +prompt('Выбирите фракцию для добавления депутата') - 1;
+        this.fractionList[fraction].addDeputy();
     };
     return VerhovnaRada;
 }());
-var depArr = [
+var depArr1 = [
     { weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000000 },
     { weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false },
     { weight: 50, height: 167, firstName: 'Юлия', lastName: 'Тимошенко', age: 60, isBribetaker: true, bribe: 200000000 },
     { weight: 106, height: 181, firstName: 'Петр', lastName: 'Порошенко', age: 55, isBribetaker: true, bribe: 500000000 },
     { weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 10000000 },
 ];
-var deputyArray = [];
-for (var _i = 0, depArr_1 = depArr; _i < depArr_1.length; _i++) {
-    var iter = depArr_1[_i];
-    deputyArray.push(new Deputy(iter.weight, iter.height, iter.firstName, iter.lastName, iter.age, iter.isBribetaker, iter.bribe));
+var deputyArray1 = [];
+for (var _i = 0, depArr1_1 = depArr1; _i < depArr1_1.length; _i++) {
+    var iter = depArr1_1[_i];
+    deputyArray1.push(new Deputy(iter.weight, iter.height, iter.firstName, iter.lastName, iter.age, iter.isBribetaker, iter.bribe));
 }
+;
+var fractionArray1 = [];
+fractionArray1.push(new Fraction('Батьківщина', deputyArray1));
 // let fraction = new Fraction("Зеленые", deputyArray);
 // let fractionArr:IFraction[] = [];
 // fractionArr.push(fraction)
@@ -229,6 +242,9 @@ for (var _i = 0, depArr_1 = depArr; _i < depArr_1.length; _i++) {
 // rada.showFraction()
 var fractionArr = [];
 var rada = new VerhovnaRada(fractionArr);
+function addDefaultData() {
+    rada.fractionList.push(fractionArray1[0]);
+}
 function startRada() {
     console.log('Верховна рада');
     console.log('1 - додати фракцію');
@@ -236,7 +252,7 @@ function startRada() {
     console.log('3 - вивести всі фракції');
     console.log('4 - вивести конкретну фракцію');
     console.log('5 - додати депутата до фракції');
-    console.log('5 - видалити депутата з фракції');
+    console.log('6 - видалити депутата з фракції');
     console.log('7 - вивести всіх хабарників фракції');
     console.log('8 - вивести найбільшого хабарника у фрації');
     console.log('9 - вивести найбільшого хабарника верховної ради');
@@ -255,6 +271,9 @@ function startRada() {
             break;
         case 4:
             rada.showFraction();
+            break;
+        case 5:
+            rada.addDeputyToFraction();
             break;
         default: alert('Выберите другое действие');
     }

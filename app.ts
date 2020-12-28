@@ -20,8 +20,13 @@
 //РОБИТИ НА ТС !!З інтрефейсами. типами і енамками!
 
 let startRadaBtn =  document.getElementById('rada');
+let radaData =  document.getElementById('radaData');
 startRadaBtn.onclick = () => {
     startRada();
+};
+radaData.onclick = () => {
+    addDefaultData();
+    radaData.classList.add('hidden')
 }
 
 abstract class Human {
@@ -178,6 +183,10 @@ class VerhovnaRada {
     }
     showAllFractions(): void{
         console.log(rada.fractionList);
+        this.fractionList.forEach((iter, index) => {
+            console.log(`${index + 1}) Фракция: '${iter.fractionName}'`);
+            
+        })
     }
     showFraction(): void {
         let fractionNum: number = +prompt('Введите номер фракции для показа');
@@ -185,19 +194,23 @@ class VerhovnaRada {
         console.log(`Выведена фракция под номером ${fractionNum} - '${this.fractionList[fractionNum].fractionName}' :`);
         console.log(this.fractionList[fractionNum]);
     }
-    removeDeputyFromFraction() : void {
+    addDeputyToFraction() : void {
+        this.showAllFractions();
+        let fraction:number = +prompt('Выбирите фракцию для добавления депутата') - 1;
+        this.fractionList[fraction].addDeputy();
     }
 }
-let depArr = [
+
+let depArr1 = [
     {weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000000},
     {weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false},
     {weight: 50, height: 167, firstName: 'Юлия', lastName: 'Тимошенко', age: 60, isBribetaker: true, bribe: 200000000},
     {weight: 106, height: 181, firstName: 'Петр', lastName: 'Порошенко', age: 55, isBribetaker: true, bribe: 500000000},
     {weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 10000000},
 ];
-let deputyArray = [];
-for (let iter of depArr) {
-    deputyArray.push(new Deputy(
+let deputyArray1 = [];
+for (let iter of depArr1) {
+    deputyArray1.push(new Deputy(
     iter.weight, 
     iter.height, 
     iter.firstName,
@@ -206,7 +219,9 @@ for (let iter of depArr) {
     iter.isBribetaker, 
     iter.bribe
     ));
-}
+};
+let fractionArray1 = [];
+fractionArray1.push(new Fraction('Батьківщина', deputyArray1));
 
 
 // let fraction = new Fraction("Зеленые", deputyArray);
@@ -242,6 +257,9 @@ for (let iter of depArr) {
 let fractionArr:IFraction[] = [];
 const rada = new VerhovnaRada(fractionArr);
 
+function addDefaultData() {
+    rada.fractionList.push(fractionArray1[0])
+}
 function startRada() {
     console.log('Верховна рада');
     console.log('1 - додати фракцію');
@@ -249,7 +267,7 @@ function startRada() {
     console.log('3 - вивести всі фракції');
     console.log('4 - вивести конкретну фракцію');
     console.log('5 - додати депутата до фракції');
-    console.log('5 - видалити депутата з фракції');
+    console.log('6 - видалити депутата з фракції');
     console.log('7 - вивести всіх хабарників фракції');
     console.log('8 - вивести найбільшого хабарника у фрації');
     console.log('9 - вивести найбільшого хабарника верховної ради');
@@ -268,6 +286,9 @@ function startRada() {
             break;
         case 4: 
             rada.showFraction();
+            break;
+        case 5: 
+            rada.addDeputyToFraction();
             break;
         default: alert('Выберите другое действие');
     };
