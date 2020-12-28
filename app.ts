@@ -63,7 +63,7 @@ class Deputy extends Human implements IDeputy {
         };
     takeBribe(money):string {
         if (!this.isBribetaker) return 'Я державу не продаю!!! Геть звідси злодій!!!';
-        if (this.isBribetaker && money > 100000) return 'Що ви мені пропонуєте??? Я чесна людина!';
+        if (this.isBribetaker && money > 1000) return 'Що ви мені пропонуєте??? Я чесна людина!';
         this.bribe = this.bribe + money;
         return 'Ваше питання передано на розгляд'
     }
@@ -170,16 +170,16 @@ class VerhovnaRada {
         this.fractionList.push(fraction);
     };
     removeFraction(): void {
-        let keyChoise = prompt('Введите номер фракции для удаления');
+        this.showAllFractions();
+        let keyChoise:number = +prompt('Введите номер фракции для удаления');
         if (keyChoise === null) {
             console.log('Удаление отменено'); 
             return
         };
-        let fractionNum: number;
-        if (fractionNum > this.fractionList.length && fractionNum < 0) alert('Извините, но такой фракции нет в списке');
-        let deletedFractionName:string = this.fractionList[fractionNum].fractionName;
-        this.fractionList.splice(fractionNum, 1);
-        console.log(`Фракция под номером ${fractionNum} - '${deletedFractionName}' успешно удалена`);
+        if (keyChoise > this.fractionList.length && keyChoise < 0) alert('Извините, но такой фракции нет в списке');
+        let deletedFractionName:string = this.fractionList[keyChoise].fractionName;
+        this.fractionList.splice(keyChoise, 1);
+        console.log(`Фракция под номером ${keyChoise} - '${deletedFractionName}' успешно удалена`);
     }
     showAllFractions(): void{
         console.log(rada.fractionList);
@@ -189,6 +189,7 @@ class VerhovnaRada {
         })
     }
     showFraction(): void {
+        this.showAllFractions();
         let fractionNum: number = +prompt('Введите номер фракции для показа');
         if (fractionNum > this.fractionList.length && fractionNum < 0) alert('Извините, но такой фракции нет в списке');
         console.log(`Выведена фракция под номером ${fractionNum} - '${this.fractionList[fractionNum].fractionName}' :`);
@@ -200,30 +201,6 @@ class VerhovnaRada {
         this.fractionList[fraction].addDeputy();
     }
 }
-
-let depArr1 = [
-    {weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000000},
-    {weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false},
-    {weight: 50, height: 167, firstName: 'Юлия', lastName: 'Тимошенко', age: 60, isBribetaker: true, bribe: 200000000},
-    {weight: 106, height: 181, firstName: 'Петр', lastName: 'Порошенко', age: 55, isBribetaker: true, bribe: 500000000},
-    {weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 10000000},
-];
-let deputyArray1 = [];
-for (let iter of depArr1) {
-    deputyArray1.push(new Deputy(
-    iter.weight, 
-    iter.height, 
-    iter.firstName,
-    iter.lastName, 
-    iter.age, 
-    iter.isBribetaker, 
-    iter.bribe
-    ));
-};
-let fractionArray1 = [];
-fractionArray1.push(new Fraction('Батьківщина', deputyArray1));
-
-
 // let fraction = new Fraction("Зеленые", deputyArray);
 // let fractionArr:IFraction[] = [];
 // fractionArr.push(fraction)
@@ -254,12 +231,64 @@ fractionArray1.push(new Fraction('Батьківщина', deputyArray1));
 // console.log(rada.fractionList);
 // rada.showFraction()
 
-let fractionArr:IFraction[] = [];
+const fractionArr:IFraction[] = [];
 const rada = new VerhovnaRada(fractionArr);
 
 function addDefaultData() {
-    rada.fractionList.push(fractionArray1[0])
+    const depArr1 = [
+        {weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000},
+        {weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false},
+        {weight: 50, height: 167, firstName: 'Юлия', lastName: 'Тимошенко', age: 60, isBribetaker: true, bribe: 10000},
+        {weight: 106, height: 181, firstName: 'Петр', lastName: 'Порошенко', age: 55, isBribetaker: true, bribe: 50000},
+        {weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 15000},
+    ];
+    const depArr2 = [
+        {weight: 88, height: 173, firstName: 'Валерия', lastName: 'Звягенцев', age: 19, isBribetaker: true, bribe: 500},
+        {weight: 65, height: 179, firstName: 'Рик', lastName: 'Санчес', age: 70, isBribetaker: true, bribe: 7000},
+        {weight: 45, height: 142, firstName: 'Морти', lastName: 'Смит', age: 14, isBribetaker: false},
+        {weight: 35, height: 162, firstName: 'Дональд', lastName: 'Дак', age: 25, isBribetaker: true, bribe: 200},
+    ];
+    const depArr3 = [
+        {weight: 105, height: 175, firstName: 'Гомер', lastName: 'Симпсон', age: 36, isBribetaker: true, bribe: 1200},
+        {weight: 65, height: 179, firstName: 'Мардж', lastName: 'Симпсон', age: 31, isBribetaker: false},
+        {weight: 43, height: 145, firstName: 'Барт', lastName: 'Симпсон', age: 9, isBribetaker: true, bribe: 200},
+        {weight: 34, height: 138, firstName: 'Лиза', lastName: 'Симпсон', age: 8, isBribetaker: false},
+        {weight: 15, height: 55, firstName: 'Мегги', lastName: 'Симпсон', age: 1, isBribetaker: false},
+    ];
+    const deputyArray = [depArr1, depArr2, depArr3];
+    const fractionsDefault: IFraction[] = [];
+    function fillDeputyDefaultArray(arr) {
+        const resInner: IDeputy[] = [];
+        const resOuter = [];
+            for (let iter of arr) {
+                iter.forEach((curr) => {
+                    resInner.push(new Deputy(
+                        curr.weight, 
+                        curr.height, 
+                        curr.firstName,
+                        curr.lastName, 
+                        curr.age, 
+                        curr.isBribetaker, 
+                        curr.bribe
+                    ))
+                })
+                let buffer = JSON.parse(JSON.stringify(resInner));
+                resOuter.push(buffer);
+                resInner.splice(0, resInner.length)
+            };
+        return resOuter;
+    };
+    const fractionArrays = fillDeputyDefaultArray(deputyArray);
+    fractionsDefault.push(new Fraction('Салат', fractionArrays[0]));
+    fractionsDefault.push(new Fraction('Веселі смаколики', fractionArrays[1]));
+    fractionsDefault.push(new Fraction('Симпсоны', fractionArrays[2]));
+    fractionsDefault.forEach(iter => {
+        rada.fractionList.push(iter)
+    })
+    console.log('Фракции по умолчанию добавлены в раду');
+    
 }
+
 function startRada() {
     console.log('Верховна рада');
     console.log('1 - додати фракцію');

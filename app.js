@@ -62,7 +62,7 @@ var Deputy = /** @class */ (function (_super) {
     Deputy.prototype.takeBribe = function (money) {
         if (!this.isBribetaker)
             return 'Я державу не продаю!!! Геть звідси злодій!!!';
-        if (this.isBribetaker && money > 100000)
+        if (this.isBribetaker && money > 1000)
             return 'Що ви мені пропонуєте??? Я чесна людина!';
         this.bribe = this.bribe + money;
         return 'Ваше питання передано на розгляд';
@@ -163,18 +163,18 @@ var VerhovnaRada = /** @class */ (function () {
     };
     ;
     VerhovnaRada.prototype.removeFraction = function () {
-        var keyChoise = prompt('Введите номер фракции для удаления');
+        this.showAllFractions();
+        var keyChoise = +prompt('Введите номер фракции для удаления');
         if (keyChoise === null) {
             console.log('Удаление отменено');
             return;
         }
         ;
-        var fractionNum;
-        if (fractionNum > this.fractionList.length && fractionNum < 0)
+        if (keyChoise > this.fractionList.length && keyChoise < 0)
             alert('Извините, но такой фракции нет в списке');
-        var deletedFractionName = this.fractionList[fractionNum].fractionName;
-        this.fractionList.splice(fractionNum, 1);
-        console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + fractionNum + " - '" + deletedFractionName + "' \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u0430");
+        var deletedFractionName = this.fractionList[keyChoise].fractionName;
+        this.fractionList.splice(keyChoise, 1);
+        console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + keyChoise + " - '" + deletedFractionName + "' \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u0430");
     };
     VerhovnaRada.prototype.showAllFractions = function () {
         console.log(rada.fractionList);
@@ -183,6 +183,7 @@ var VerhovnaRada = /** @class */ (function () {
         });
     };
     VerhovnaRada.prototype.showFraction = function () {
+        this.showAllFractions();
         var fractionNum = +prompt('Введите номер фракции для показа');
         if (fractionNum > this.fractionList.length && fractionNum < 0)
             alert('Извините, но такой фракции нет в списке');
@@ -196,21 +197,6 @@ var VerhovnaRada = /** @class */ (function () {
     };
     return VerhovnaRada;
 }());
-var depArr1 = [
-    { weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000000 },
-    { weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false },
-    { weight: 50, height: 167, firstName: 'Юлия', lastName: 'Тимошенко', age: 60, isBribetaker: true, bribe: 200000000 },
-    { weight: 106, height: 181, firstName: 'Петр', lastName: 'Порошенко', age: 55, isBribetaker: true, bribe: 500000000 },
-    { weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 10000000 },
-];
-var deputyArray1 = [];
-for (var _i = 0, depArr1_1 = depArr1; _i < depArr1_1.length; _i++) {
-    var iter = depArr1_1[_i];
-    deputyArray1.push(new Deputy(iter.weight, iter.height, iter.firstName, iter.lastName, iter.age, iter.isBribetaker, iter.bribe));
-}
-;
-var fractionArray1 = [];
-fractionArray1.push(new Fraction('Батьківщина', deputyArray1));
 // let fraction = new Fraction("Зеленые", deputyArray);
 // let fractionArr:IFraction[] = [];
 // fractionArr.push(fraction)
@@ -243,7 +229,52 @@ fractionArray1.push(new Fraction('Батьківщина', deputyArray1));
 var fractionArr = [];
 var rada = new VerhovnaRada(fractionArr);
 function addDefaultData() {
-    rada.fractionList.push(fractionArray1[0]);
+    var depArr1 = [
+        { weight: 75, height: 178, firstName: 'Олег', lastName: 'Ляшко', age: 48, isBribetaker: true, bribe: 5000 },
+        { weight: 64, height: 164, firstName: 'Виталий', lastName: 'Голобородько', age: 42, isBribetaker: false },
+        { weight: 50, height: 167, firstName: 'Юлия', lastName: 'Тимошенко', age: 60, isBribetaker: true, bribe: 10000 },
+        { weight: 106, height: 181, firstName: 'Петр', lastName: 'Порошенко', age: 55, isBribetaker: true, bribe: 50000 },
+        { weight: 65, height: 164, firstName: 'Владимир', lastName: 'Зеленский', age: 42, isBribetaker: true, bribe: 15000 },
+    ];
+    var depArr2 = [
+        { weight: 88, height: 173, firstName: 'Валерия', lastName: 'Звягенцев', age: 19, isBribetaker: true, bribe: 500 },
+        { weight: 65, height: 179, firstName: 'Рик', lastName: 'Санчес', age: 70, isBribetaker: true, bribe: 7000 },
+        { weight: 45, height: 142, firstName: 'Морти', lastName: 'Смит', age: 14, isBribetaker: false },
+        { weight: 35, height: 162, firstName: 'Дональд', lastName: 'Дак', age: 25, isBribetaker: true, bribe: 200 },
+    ];
+    var depArr3 = [
+        { weight: 105, height: 175, firstName: 'Гомер', lastName: 'Симпсон', age: 36, isBribetaker: true, bribe: 1200 },
+        { weight: 65, height: 179, firstName: 'Мардж', lastName: 'Симпсон', age: 31, isBribetaker: false },
+        { weight: 43, height: 145, firstName: 'Барт', lastName: 'Симпсон', age: 9, isBribetaker: true, bribe: 200 },
+        { weight: 34, height: 138, firstName: 'Лиза', lastName: 'Симпсон', age: 8, isBribetaker: false },
+        { weight: 15, height: 55, firstName: 'Мегги', lastName: 'Симпсон', age: 1, isBribetaker: false },
+    ];
+    var deputyArray = [depArr1, depArr2, depArr3];
+    var fractionsDefault = [];
+    function fillDeputyDefaultArray(arr) {
+        var resInner = [];
+        var resOuter = [];
+        for (var _i = 0, arr_1 = arr; _i < arr_1.length; _i++) {
+            var iter = arr_1[_i];
+            iter.forEach(function (curr) {
+                resInner.push(new Deputy(curr.weight, curr.height, curr.firstName, curr.lastName, curr.age, curr.isBribetaker, curr.bribe));
+            });
+            var buffer = JSON.parse(JSON.stringify(resInner));
+            resOuter.push(buffer);
+            resInner.splice(0, resInner.length);
+        }
+        ;
+        return resOuter;
+    }
+    ;
+    var fractionArrays = fillDeputyDefaultArray(deputyArray);
+    fractionsDefault.push(new Fraction('Салат', fractionArrays[0]));
+    fractionsDefault.push(new Fraction('Веселі смаколики', fractionArrays[1]));
+    fractionsDefault.push(new Fraction('Симпсоны', fractionArrays[2]));
+    fractionsDefault.forEach(function (iter) {
+        rada.fractionList.push(iter);
+    });
+    console.log('Фракции по умолчанию добавлены в раду');
 }
 function startRada() {
     console.log('Верховна рада');
