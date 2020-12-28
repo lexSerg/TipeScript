@@ -89,12 +89,17 @@ var Fraction = /** @class */ (function () {
             bribe = +prompt('Размер взяток?');
         var deput = new Deputy(weight, height, firstName, lastName, age, isBribetaker, bribe);
         this.deputyList.push(deput);
+        console.log("\u0414\u0435\u043F\u0443\u0442\u0430\u0442 '" + deput.firstName + " " + deput.lastName + "' \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D \u0432\u043E \u0444\u0440\u0430\u043A\u0446\u0438\u044E");
     };
     ;
     Fraction.prototype.removeDeputy = function () {
-        var deputy = +prompt('Введите номер депутата из списка для удаления');
+        this.showAllDeputy();
+        var deputy = +prompt('Введите номер депутата из списка для удаления') - 1;
+        var firstName = this.deputyList[deputy].firstName;
+        var lastName = this.deputyList[deputy].lastName;
         this.deputyList.splice(deputy, 1);
-        return "\u0423\u0434\u0430\u043B\u0435\u043D \u0434\u0435\u043F\u0443\u0442\u0430\u0442 \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + deputy + " -\n         " + this.deputyList[deputy].firstName + "\n         " + this.deputyList[deputy].firstName + " ";
+        var res = "\u0423\u0434\u0430\u043B\u0435\u043D \u0434\u0435\u043F\u0443\u0442\u0430\u0442 \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + (deputy + 1) + " - " + firstName + " " + lastName + " ";
+        console.log(res);
     };
     Fraction.prototype.removeAllDeputies = function () {
         this.deputyList = [];
@@ -134,6 +139,9 @@ var Fraction = /** @class */ (function () {
         (this.deputyList.length === 0) ?
             console.log('Во фракции нет ни одного депутата') :
             console.log(this.deputyList);
+        this.deputyList.forEach(function (value, index) {
+            console.log(index + 1 + ") " + value.firstName + " " + value.lastName);
+        });
     };
     ;
     Fraction.prototype.showTotalCorruptionSum = function () {
@@ -164,7 +172,7 @@ var VerhovnaRada = /** @class */ (function () {
     ;
     VerhovnaRada.prototype.removeFraction = function () {
         this.showAllFractions();
-        var keyChoise = +prompt('Введите номер фракции для удаления');
+        var keyChoise = +prompt('Введите номер фракции для удаления') - 1;
         if (keyChoise === null) {
             console.log('Удаление отменено');
             return;
@@ -174,7 +182,7 @@ var VerhovnaRada = /** @class */ (function () {
             alert('Извините, но такой фракции нет в списке');
         var deletedFractionName = this.fractionList[keyChoise].fractionName;
         this.fractionList.splice(keyChoise, 1);
-        console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + keyChoise + " - '" + deletedFractionName + "' \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u0430");
+        console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + (keyChoise + 1) + " - '" + deletedFractionName + "' \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0443\u0434\u0430\u043B\u0435\u043D\u0430");
     };
     VerhovnaRada.prototype.showAllFractions = function () {
         console.log(rada.fractionList);
@@ -184,16 +192,21 @@ var VerhovnaRada = /** @class */ (function () {
     };
     VerhovnaRada.prototype.showFraction = function () {
         this.showAllFractions();
-        var fractionNum = +prompt('Введите номер фракции для показа');
+        var fractionNum = +prompt('Введите номер фракции для показа') - 1;
         if (fractionNum > this.fractionList.length && fractionNum < 0)
             alert('Извините, но такой фракции нет в списке');
-        console.log("\u0412\u044B\u0432\u0435\u0434\u0435\u043D\u0430 \u0444\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + fractionNum + " - '" + this.fractionList[fractionNum].fractionName + "' :");
+        console.log("\u0412\u044B\u0432\u0435\u0434\u0435\u043D\u0430 \u0444\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + (fractionNum + 1) + " - '" + this.fractionList[fractionNum].fractionName + "' :");
         console.log(this.fractionList[fractionNum]);
     };
     VerhovnaRada.prototype.addDeputyToFraction = function () {
         this.showAllFractions();
         var fraction = +prompt('Выбирите фракцию для добавления депутата') - 1;
         this.fractionList[fraction].addDeputy();
+    };
+    VerhovnaRada.prototype.removeDeputyFromFraction = function () {
+        this.showAllFractions();
+        var fraction = +prompt('Выбирите фракцию для удаления депутата') - 1;
+        this.fractionList[fraction].removeDeputy();
     };
     return VerhovnaRada;
 }());
@@ -274,7 +287,7 @@ function addDefaultData() {
     fractionsDefault.forEach(function (iter) {
         rada.fractionList.push(iter);
     });
-    console.log('Фракции по умолчанию добавлены в раду');
+    console.log('Фракции по умолчанию добавлены в Раду');
 }
 function startRada() {
     console.log('Верховна рада');
@@ -305,6 +318,9 @@ function startRada() {
             break;
         case 5:
             rada.addDeputyToFraction();
+            break;
+        case 6:
+            rada.removeDeputyFromFraction();
             break;
         default: alert('Выберите другое действие');
     }

@@ -71,10 +71,10 @@ class Deputy extends Human implements IDeputy {
 interface IFraction{
     fractionName:string;
     deputyList: IDeputy[];
-    addDeputy();
-    removeDeputy(deputy:number): string;
+    addDeputy():void;
+    removeDeputy():void;
     removeAllDeputies():void;
-    removeCorruptionDeputy(): void;
+    removeCorruptionDeputy():void;
     showMostCorruptionDeputy():void;
     showMostCorruptionDeputy():void;
     showAllDeputy();
@@ -88,7 +88,7 @@ class Fraction implements IFraction{
         this.fractionName = fractionName;
         this.deputyList = deputyList;
     };
-    addDeputy(){
+    addDeputy(): void{
        let firstName = prompt('Введите имя депутата');
        let lastName = prompt('Введите фамилию депутата');
        let weight = +prompt('Введите вес депутата');
@@ -99,13 +99,16 @@ class Fraction implements IFraction{
        if (isBribetaker) bribe = +prompt('Размер взяток?')
        let deput =  new Deputy(weight, height, firstName, lastName, age, isBribetaker, bribe);
        this.deputyList.push(deput);
+       console.log(`Депутат '${deput.firstName} ${deput.lastName}' добавлен во фракцию`); 
     };
-    removeDeputy(): string{
-        let deputy:number = +prompt('Введите номер депутата из списка для удаления')
-        this.deputyList.splice(deputy, 1)
-        return `Удален депутат под номером ${deputy} -
-         ${this.deputyList[deputy].firstName}
-         ${this.deputyList[deputy].firstName} `
+    removeDeputy(): void{
+        this.showAllDeputy();
+        let deputy:number = +prompt('Введите номер депутата из списка для удаления') - 1;
+        let firstName = this.deputyList[deputy].firstName;
+        let lastName = this.deputyList[deputy].lastName;
+        this.deputyList.splice(deputy, 1);
+        let res = `Удален депутат под номером ${deputy + 1} - ${firstName} ${lastName} `
+        console.log(res);
     }
     removeAllDeputies():void {
         this.deputyList = [];
@@ -144,7 +147,10 @@ class Fraction implements IFraction{
     showAllDeputy(){
         (this.deputyList.length === 0) ? 
         console.log('Во фракции нет ни одного депутата'):
-        console.log(this.deputyList);    
+        console.log(this.deputyList);
+        this.deputyList.forEach((value, index) => {
+            console.log(`${index + 1}) ${value.firstName} ${value.lastName}`);
+        })    
     };
     showTotalCorruptionSum():void {
             const firstElemBribe = this.deputyList[0].bribe;
@@ -171,7 +177,7 @@ class VerhovnaRada {
     };
     removeFraction(): void {
         this.showAllFractions();
-        let keyChoise:number = +prompt('Введите номер фракции для удаления');
+        let keyChoise:number = +prompt('Введите номер фракции для удаления') - 1;
         if (keyChoise === null) {
             console.log('Удаление отменено'); 
             return
@@ -179,7 +185,7 @@ class VerhovnaRada {
         if (keyChoise > this.fractionList.length && keyChoise < 0) alert('Извините, но такой фракции нет в списке');
         let deletedFractionName:string = this.fractionList[keyChoise].fractionName;
         this.fractionList.splice(keyChoise, 1);
-        console.log(`Фракция под номером ${keyChoise} - '${deletedFractionName}' успешно удалена`);
+        console.log(`Фракция под номером ${keyChoise + 1} - '${deletedFractionName}' успешно удалена`);
     }
     showAllFractions(): void{
         console.log(rada.fractionList);
@@ -190,15 +196,20 @@ class VerhovnaRada {
     }
     showFraction(): void {
         this.showAllFractions();
-        let fractionNum: number = +prompt('Введите номер фракции для показа');
+        let fractionNum: number = +prompt('Введите номер фракции для показа') - 1;
         if (fractionNum > this.fractionList.length && fractionNum < 0) alert('Извините, но такой фракции нет в списке');
-        console.log(`Выведена фракция под номером ${fractionNum} - '${this.fractionList[fractionNum].fractionName}' :`);
+        console.log(`Выведена фракция под номером ${fractionNum + 1} - '${this.fractionList[fractionNum].fractionName}' :`);
         console.log(this.fractionList[fractionNum]);
     }
     addDeputyToFraction() : void {
         this.showAllFractions();
         let fraction:number = +prompt('Выбирите фракцию для добавления депутата') - 1;
         this.fractionList[fraction].addDeputy();
+    }
+    removeDeputyFromFraction() : void {
+        this.showAllFractions();
+        let fraction:number = +prompt('Выбирите фракцию для удаления депутата') - 1;
+        this.fractionList[fraction].removeDeputy();
     }
 }
 // let fraction = new Fraction("Зеленые", deputyArray);
@@ -285,7 +296,7 @@ function addDefaultData() {
     fractionsDefault.forEach(iter => {
         rada.fractionList.push(iter)
     })
-    console.log('Фракции по умолчанию добавлены в раду');
+    console.log('Фракции по умолчанию добавлены в Раду');
     
 }
 
@@ -318,6 +329,9 @@ function startRada() {
             break;
         case 5: 
             rada.addDeputyToFraction();
+            break;
+        case 6: 
+            rada.removeDeputyFromFraction();
             break;
         default: alert('Выберите другое действие');
     };
