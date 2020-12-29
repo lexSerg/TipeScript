@@ -136,7 +136,8 @@ class Fraction implements IFraction{
             console.log('Во фракции нет коррупционеров');
             return
         }
-        let res = this.deputyList.reduce((acc,current) => {
+        const arr = JSON.parse(JSON.stringify(this.deputyList))
+        let res = arr.reduce((acc,current) => {
             if (acc.bribe < current.bribe) acc = current;
             return acc
         });
@@ -235,7 +236,15 @@ class VerhovnaRada {
         console.log(`Самый жадный депутат фракции - '${mostCorruptionDeputy.firstName} ${mostCorruptionDeputy.lastName}'`);     
     };
     showMostCorruptionDeputyInRada():void{
-        this.fractionList
+        let res: IDeputy;
+        const arrDep: IDeputy[] = [];
+        for(let i = 0; i < this.fractionList.length; i++) {
+            arrDep.push(this.findMostCorruptionDeputyInFraction(this.fractionList, i))
+        };
+        console.log(arrDep);
+
+        let user = new Fraction('Buffer', arrDep);
+        user.showMostCorruptionDeputy();
     }
 
     // Вспомагательные служебные методы
@@ -388,6 +397,9 @@ function startRada() {
             break;
         case 8: 
             rada.showMostFractionCoruptionDeputy();
+            break;
+        case 9: 
+            rada.showMostCorruptionDeputyInRada();
             break;
             
         default: alert('Выберите другое действие');

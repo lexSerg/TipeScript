@@ -127,7 +127,8 @@ var Fraction = /** @class */ (function () {
             console.log('Во фракции нет коррупционеров');
             return;
         }
-        var res = this.deputyList.reduce(function (acc, current) {
+        var arr = JSON.parse(JSON.stringify(this.deputyList));
+        var res = arr.reduce(function (acc, current) {
             if (acc.bribe < current.bribe)
                 acc = current;
             return acc;
@@ -169,7 +170,7 @@ var VerhovnaRada = /** @class */ (function () {
         var name = prompt('Введите название фракции');
         var fraction = new Fraction(name, []);
         this.fractionList.push(fraction);
-        console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F " + name + " \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0430 \u0432 \u0420\u0430\u0434\u0443");
+        console.log("\u0424\u0440\u0430\u043A\u0446\u0438\u044F '" + name + "' \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0430 \u0432 \u0420\u0430\u0434\u0443");
     };
     ;
     VerhovnaRada.prototype.removeFraction = function () {
@@ -237,7 +238,15 @@ var VerhovnaRada = /** @class */ (function () {
     };
     ;
     VerhovnaRada.prototype.showMostCorruptionDeputyInRada = function () {
-        this.fractionList;
+        var res;
+        var arrDep = [];
+        for (var i = 0; i < this.fractionList.length; i++) {
+            arrDep.push(this.findMostCorruptionDeputyInFraction(this.fractionList, i));
+        }
+        ;
+        console.log(arrDep);
+        var user = new Fraction('Buffer', arrDep);
+        user.showMostCorruptionDeputy();
     };
     // Вспомагательные служебные методы
     VerhovnaRada.prototype.isDeputiesInFraction = function (num) {
@@ -385,6 +394,9 @@ function startRada() {
             break;
         case 8:
             rada.showMostFractionCoruptionDeputy();
+            break;
+        case 9:
+            rada.showMostCorruptionDeputyInRada();
             break;
         default: alert('Выберите другое действие');
     }
