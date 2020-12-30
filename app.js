@@ -248,6 +248,23 @@ var VerhovnaRada = /** @class */ (function () {
         var user = new Fraction('Buffer', arrDep);
         user.showMostCorruptionDeputy();
     };
+    VerhovnaRada.prototype.showAllDeputiesInFraction = function () {
+        this.showAllFractions();
+        var choise = +prompt('Выбирите фракцию для отображения всех депутатов') - 1;
+        if (choise > this.fractionList.length && choise < 0)
+            alert('Извините, но такой фракции нет в списке');
+        console.log("\u0412\u043E \u0444\u0440\u0430\u043A\u0446\u0438\u0438 '" + this.fractionList[choise].fractionName + "' - " + this.fractionList[choise].deputyList.length + " \u0434\u0435\u043F\u0443\u0442\u0430\u0442\u043E\u0432:");
+        this.fractionList[choise].showAllDeputy();
+        return this.fractionList[choise].deputyList;
+    };
+    ;
+    VerhovnaRada.prototype.takeBribeToDeputy = function () {
+        var depArr = this.showAllDeputiesInFraction();
+        var choise = +prompt('Выбирите депутата, которому нужно предложить взятку') - 1;
+        var money = +prompt('Введите сумму взятки');
+        console.log(depArr[choise]);
+        console.log(depArr[choise].takeBribe(money));
+    };
     // Вспомагательные служебные методы
     VerhovnaRada.prototype.isDeputiesInFraction = function (num) {
         if (this.fractionList[num].deputyList.length === 0) {
@@ -272,6 +289,7 @@ var VerhovnaRada = /** @class */ (function () {
         var res = bufferArr.reduce(function (acc, iter) {
             if (acc.bribe < iter.bribe)
                 acc = iter;
+            console.log(acc);
             return acc;
         });
         return res;
@@ -333,16 +351,17 @@ function addDefaultData() {
     var deputyArray = [depArr1, depArr2, depArr3];
     var fractionsDefault = [];
     function fillDeputyDefaultArray(arr) {
-        var resInner = [];
         var resOuter = [];
-        for (var _i = 0, arr_2 = arr; _i < arr_2.length; _i++) {
-            var iter = arr_2[_i];
+        var _loop_1 = function (iter) {
+            var resInner = [];
             iter.forEach(function (curr) {
                 resInner.push(new Deputy(curr.weight, curr.height, curr.firstName, curr.lastName, curr.age, curr.isBribetaker, curr.bribe));
             });
-            var buffer = JSON.parse(JSON.stringify(resInner));
-            resOuter.push(buffer);
-            resInner.splice(0, resInner.length);
+            resOuter.push(resInner);
+        };
+        for (var _i = 0, arr_2 = arr; _i < arr_2.length; _i++) {
+            var iter = arr_2[_i];
+            _loop_1(iter);
         }
         ;
         return resOuter;
@@ -369,6 +388,7 @@ function startRada() {
     console.log('8 - вивести найбільшого хабарника у фрації');
     console.log('9 - вивести найбільшого хабарника верховної ради');
     console.log('10 - вивести всіх депутатів фракції');
+    console.log('11 - запропонувати хабаря депутату');
     var choise = +prompt('Выберите действие');
     switch (choise) {
         case 1:
@@ -397,6 +417,12 @@ function startRada() {
             break;
         case 9:
             rada.showMostCorruptionDeputyInRada();
+            break;
+        case 10:
+            rada.showAllDeputiesInFraction();
+            break;
+        case 11:
+            rada.takeBribeToDeputy();
             break;
         default: alert('Выберите другое действие');
     }

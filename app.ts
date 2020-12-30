@@ -52,7 +52,7 @@ class Deputy extends Human implements IDeputy {
     lastName: string;
     age: number;
     isBribetaker: boolean;
-    bribe: number;
+    bribe?: number;
         constructor(weight: number, height: number, firstName: string, lastName: string, age: number, isBribetaker: boolean, bribe?: number){
             super(weight, height)
             this.firstName = firstName;
@@ -243,10 +243,24 @@ class VerhovnaRada {
         };
         console.log(arrDep);
 
-        let user = new Fraction('Buffer', arrDep);
+        const user = new Fraction('Buffer', arrDep);
         user.showMostCorruptionDeputy();
     }
-
+    showAllDeputiesInFraction():IDeputy[]{
+        this.showAllFractions();
+        let choise:number = +prompt('Выбирите фракцию для отображения всех депутатов') - 1;
+        if (choise > this.fractionList.length && choise < 0) alert('Извините, но такой фракции нет в списке');
+        console.log(`Во фракции '${this.fractionList[choise].fractionName}' - ${this.fractionList[choise].deputyList.length} депутатов:`);
+        this.fractionList[choise].showAllDeputy();
+        return this.fractionList[choise].deputyList;
+    };
+    takeBribeToDeputy():void{
+        const depArr:IDeputy[] = this.showAllDeputiesInFraction();
+        const choise:number = +prompt('Выбирите депутата, которому нужно предложить взятку') - 1;
+        const money:number = +prompt('Введите сумму взятки');
+        console.log(depArr[choise]);
+        console.log( depArr[choise].takeBribe(money));
+    }
     // Вспомагательные служебные методы
     isDeputiesInFraction(num:number):boolean{
         if (this.fractionList[num].deputyList.length === 0) {
@@ -266,6 +280,7 @@ class VerhovnaRada {
         const bufferArr = JSON.parse(JSON.stringify(arr[num].deputyList));
         let res = bufferArr.reduce((acc, iter) => {
             if (acc.bribe < iter.bribe) acc = iter;
+            console.log(acc);
             return acc
         })
         return res;
@@ -302,6 +317,7 @@ class VerhovnaRada {
 // console.log(rada.fractionList);
 // rada.showFraction()
 
+
 const fractionArr:IFraction[] = [];
 const rada = new VerhovnaRada(fractionArr);
 
@@ -329,9 +345,9 @@ function addDefaultData() {
     const deputyArray = [depArr1, depArr2, depArr3];
     const fractionsDefault: IFraction[] = [];
     function fillDeputyDefaultArray(arr) {
-        const resInner: IDeputy[] = [];
         const resOuter = [];
             for (let iter of arr) {
+                const resInner: IDeputy[] = [];
                 iter.forEach((curr) => {
                     resInner.push(new Deputy(
                         curr.weight, 
@@ -343,9 +359,7 @@ function addDefaultData() {
                         curr.bribe
                     ))
                 })
-                let buffer = JSON.parse(JSON.stringify(resInner));
-                resOuter.push(buffer);
-                resInner.splice(0, resInner.length)
+                resOuter.push(resInner);
             };
         return resOuter;
     };
@@ -372,6 +386,7 @@ function startRada() {
     console.log('8 - вивести найбільшого хабарника у фрації');
     console.log('9 - вивести найбільшого хабарника верховної ради');
     console.log('10 - вивести всіх депутатів фракції');
+    console.log('11 - запропонувати хабаря депутату');
     let choise:number = +prompt('Выберите действие');
     switch(choise) {
         case 1: 
@@ -401,11 +416,15 @@ function startRada() {
         case 9: 
             rada.showMostCorruptionDeputyInRada();
             break;
-            
+        case 10: 
+            rada.showAllDeputiesInFraction();
+            break;
+        case 11: 
+            rada.takeBribeToDeputy()
+            break;   
         default: alert('Выберите другое действие');
         
     };
     console.log('*********************');
-    
 }
 startRada();
