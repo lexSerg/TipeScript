@@ -241,6 +241,8 @@ var VerhovnaRada = /** @class */ (function () {
         var res;
         var arrDep = [];
         for (var i = 0; i < this.fractionList.length; i++) {
+            if (this.fractionList[i].deputyList.length === 0)
+                continue;
             arrDep.push(this.findMostCorruptionDeputyInFraction(this.fractionList, i));
         }
         ;
@@ -289,7 +291,6 @@ var VerhovnaRada = /** @class */ (function () {
         var res = bufferArr.reduce(function (acc, iter) {
             if (acc.bribe < iter.bribe)
                 acc = iter;
-            console.log(acc);
             return acc;
         });
         return res;

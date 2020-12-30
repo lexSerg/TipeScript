@@ -161,8 +161,7 @@ class Fraction implements IFraction{
             return acc
             });
             total = res.bribe;
-            this.deputyList[0].bribe = firstElemBribe; //Потому как было мутировано значение bribe первого элемента
-            //Не самое удачное решение но захотелось сделать через reduce()
+            this.deputyList[0].bribe = firstElemBribe;
         console.log(`Общая сумма взяток фракции: ${total}$`);    
     }
 }
@@ -239,6 +238,7 @@ class VerhovnaRada {
         let res: IDeputy;
         const arrDep: IDeputy[] = [];
         for(let i = 0; i < this.fractionList.length; i++) {
+            if (this.fractionList[i].deputyList.length === 0) continue;
             arrDep.push(this.findMostCorruptionDeputyInFraction(this.fractionList, i))
         };
         console.log(arrDep);
@@ -280,7 +280,6 @@ class VerhovnaRada {
         const bufferArr = JSON.parse(JSON.stringify(arr[num].deputyList));
         let res = bufferArr.reduce((acc, iter) => {
             if (acc.bribe < iter.bribe) acc = iter;
-            console.log(acc);
             return acc
         })
         return res;
