@@ -154,8 +154,7 @@ var Fraction = /** @class */ (function () {
             return acc;
         });
         total = res.bribe;
-        this.deputyList[0].bribe = firstElemBribe; //Потому как было мутировано значение bribe первого элемента
-        //Не самое удачное решение но захотелось сделать через reduce()
+        this.deputyList[0].bribe = firstElemBribe;
         console.log("\u041E\u0431\u0449\u0430\u044F \u0441\u0443\u043C\u043C\u0430 \u0432\u0437\u044F\u0442\u043E\u043A \u0444\u0440\u0430\u043A\u0446\u0438\u0438: " + total + "$");
     };
     return Fraction;
@@ -196,25 +195,29 @@ var VerhovnaRada = /** @class */ (function () {
     VerhovnaRada.prototype.showFraction = function () {
         this.showAllFractions();
         var fractionNum = +prompt('Введите номер фракции для показа') - 1;
-        if (fractionNum > this.fractionList.length && fractionNum < 0)
-            alert('Извините, но такой фракции нет в списке');
+        if (!this.isFractioninInList(fractionNum))
+            return;
         console.log("\u0412\u044B\u0432\u0435\u0434\u0435\u043D\u0430 \u0444\u0440\u0430\u043A\u0446\u0438\u044F \u043F\u043E\u0434 \u043D\u043E\u043C\u0435\u0440\u043E\u043C " + (fractionNum + 1) + " - '" + this.fractionList[fractionNum].fractionName + "' :");
         console.log(this.fractionList[fractionNum]);
     };
     VerhovnaRada.prototype.addDeputyToFraction = function () {
         this.showAllFractions();
         var fraction = +prompt('Выбирите фракцию для добавления депутата') - 1;
+        if (!this.isFractioninInList(fraction))
+            return;
         this.fractionList[fraction].addDeputy();
     };
     VerhovnaRada.prototype.removeDeputyFromFraction = function () {
         this.showAllFractions();
         var fraction = +prompt('Выбирите фракцию для удаления депутата') - 1;
+        if (!this.isFractioninInList(fraction))
+            return;
         this.fractionList[fraction].removeDeputy();
     };
     VerhovnaRada.prototype.showFractionCoruptionDeputies = function () {
         this.showAllFractions();
         var choise = +prompt('Выбирите фракцию для поиска взяточников') - 1;
-        if (this.isDeputiesInFraction(choise))
+        if (!this.isFractioninInList(choise))
             return;
         var coruptionsDeputies = this.fractionList[choise].deputyList.filter(function (iter) { return iter.isBribetaker; });
         if (!this.isCorruoptioDeputiesInFraction(coruptionsDeputies))
@@ -228,6 +231,8 @@ var VerhovnaRada = /** @class */ (function () {
     VerhovnaRada.prototype.showMostFractionCoruptionDeputy = function () {
         this.showAllFractions();
         var choise = +prompt('Выбирите фракцию для поиска самого жадного депутата') - 1;
+        if (!this.isFractioninInList(choise))
+            return;
         if (this.isDeputiesInFraction(choise))
             return;
         if (!this.isCorruoptioDeputiesInFraction(this.fractionList[choise].deputyList))
@@ -253,8 +258,10 @@ var VerhovnaRada = /** @class */ (function () {
     VerhovnaRada.prototype.showAllDeputiesInFraction = function () {
         this.showAllFractions();
         var choise = +prompt('Выбирите фракцию для отображения всех депутатов') - 1;
-        if (choise > this.fractionList.length && choise < 0)
+        if (choise + 1 > this.fractionList.length || choise < 0) {
             alert('Извините, но такой фракции нет в списке');
+            return;
+        }
         console.log("\u0412\u043E \u0444\u0440\u0430\u043A\u0446\u0438\u0438 '" + this.fractionList[choise].fractionName + "' - " + this.fractionList[choise].deputyList.length + " \u0434\u0435\u043F\u0443\u0442\u0430\u0442\u043E\u0432:");
         this.fractionList[choise].showAllDeputy();
         return this.fractionList[choise].deputyList;
@@ -295,6 +302,15 @@ var VerhovnaRada = /** @class */ (function () {
         });
         return res;
     };
+    ;
+    VerhovnaRada.prototype.isFractioninInList = function (choise) {
+        if (choise + 1 > this.fractionList.length || choise < 0) {
+            alert('Извините, но такой фракции нет в списке');
+            return false;
+        }
+        return true;
+    };
+    ;
     return VerhovnaRada;
 }());
 // let fraction = new Fraction("Зеленые", deputyArray);

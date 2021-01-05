@@ -199,24 +199,26 @@ class VerhovnaRada {
     showFraction(): void {
         this.showAllFractions();
         let fractionNum: number = +prompt('Введите номер фракции для показа') - 1;
-        if (fractionNum > this.fractionList.length && fractionNum < 0) alert('Извините, но такой фракции нет в списке');
+        if (!this.isFractioninInList(fractionNum)) return;
         console.log(`Выведена фракция под номером ${fractionNum + 1} - '${this.fractionList[fractionNum].fractionName}' :`);
         console.log(this.fractionList[fractionNum]);
     }
     addDeputyToFraction() : void {
         this.showAllFractions();
         let fraction:number = +prompt('Выбирите фракцию для добавления депутата') - 1;
+        if (!this.isFractioninInList(fraction)) return;
         this.fractionList[fraction].addDeputy();
     }
     removeDeputyFromFraction() : void {
         this.showAllFractions();
         let fraction:number = +prompt('Выбирите фракцию для удаления депутата') - 1;
+        if (!this.isFractioninInList(fraction)) return;
         this.fractionList[fraction].removeDeputy();
     }
     showFractionCoruptionDeputies():void {
         this.showAllFractions();
         let choise:number = +prompt('Выбирите фракцию для поиска взяточников') - 1;
-        if (this.isDeputiesInFraction(choise)) return;
+        if (!this.isFractioninInList(choise)) return;
         const coruptionsDeputies = this.fractionList[choise].deputyList.filter(iter => iter.isBribetaker);
         if (!this.isCorruoptioDeputiesInFraction(coruptionsDeputies)) return;
         console.log(coruptionsDeputies);
@@ -228,6 +230,7 @@ class VerhovnaRada {
     showMostFractionCoruptionDeputy():void {
         this.showAllFractions();
         let choise:number = +prompt('Выбирите фракцию для поиска самого жадного депутата') - 1;
+        if (!this.isFractioninInList(choise)) return;
         if (this.isDeputiesInFraction(choise)) return;
         if (!this.isCorruoptioDeputiesInFraction(this.fractionList[choise].deputyList)) return;
         const mostCorruptionDeputy:IDeputy = this.findMostCorruptionDeputyInFraction(this.fractionList, choise)
@@ -249,7 +252,10 @@ class VerhovnaRada {
     showAllDeputiesInFraction():IDeputy[]{
         this.showAllFractions();
         let choise:number = +prompt('Выбирите фракцию для отображения всех депутатов') - 1;
-        if (choise > this.fractionList.length && choise < 0) alert('Извините, но такой фракции нет в списке');
+        if (choise + 1 > this.fractionList.length || choise < 0) {
+            alert('Извините, но такой фракции нет в списке');
+            return;
+        }
         console.log(`Во фракции '${this.fractionList[choise].fractionName}' - ${this.fractionList[choise].deputyList.length} депутатов:`);
         this.fractionList[choise].showAllDeputy();
         return this.fractionList[choise].deputyList;
@@ -283,7 +289,15 @@ class VerhovnaRada {
             return acc
         })
         return res;
-    }
+    };
+    isFractioninInList(choise:number):boolean {
+        if (choise + 1 > this.fractionList.length || choise < 0) {
+            alert('Извините, но такой фракции нет в списке');
+            return false;
+        }
+        return true;
+    };
+    
 
 }
 // let fraction = new Fraction("Зеленые", deputyArray);
